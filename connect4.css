@@ -11,19 +11,22 @@
 
 .piece {
   /* TODO: make into circles */
-  /*margin: 5px;
+  margin: 5px;
   width: 80%;
-  height: 80%;*/
-  background: #FF7A59;
-  width: 200px;
-  height: 200px;
+  height: 80%
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  text-align: center;
+  
 }
 
 /* TODO: make pieces red/blue,  depending on player 1/2 piece */
+
+.piece.player1 {
+  background-color: red;
+}
+
+.piece.player2 {
+  background-color: blue;
+}
 
 /* column-top is table row of clickable areas for each column */
 
