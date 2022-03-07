@@ -9,20 +9,18 @@ const WIDTH = 7;
 const HEIGHT = 6;
 
 const currPlayer = 1; // active player: 1 or 2
-let board = []; // array of rows, each row is array of cells  (board[y][x])
+let board = [];
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-  // TODO: set "board" to empty HEIGHT x WIDTH matrix array
-  for (let y = 0; y < HEIGHT; y++) {
+    for (let y = 0; y < HEIGHT; y++) {
       board.push(Array.from({ length: WIDTH }));
     } 
 }
 
-/** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
 const board = document.getElementById('board');
@@ -60,7 +58,6 @@ const board = document.getElementById('board');
     board.append(row);
   }
 }
-
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
