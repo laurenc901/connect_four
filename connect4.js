@@ -9,14 +9,7 @@ const WIDTH = 7;
 const HEIGHT = 6;
 
 const currPlayer = 1; // active player: 1 or 2
-let board = [
-[ null, null, null, null, null, null, null ],
-[ null, null, null, null, null, null, null ],
-[ null, null, null, null, null, null, null ],
-[ null, null, null, null, null, null, null ],
-[ null, null, null, null, null, null, null ],
-[ null, null, null, null, null, null, null ],
-];; // array of rows, each row is array of cells  (board[y][x])
+let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
@@ -24,36 +17,50 @@ let board = [
 
 function makeBoard() {
   // TODO: set "board" to empty HEIGHT x WIDTH matrix array
+  for (let y = 0; y < HEIGHT; y++) {
+      board.push(Array.from({ length: WIDTH }));
+    } 
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
-  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
-const htmlBoard = document.getElementById('board');
-  // TODO: add comment for this code
+const board = document.getElementById('board');
+ //create column tops for top of board
   const top = document.createElement("tr");
+  // give it id of column top
   top.setAttribute("id", "column-top");
+  // add an event listener to the top row when clicked and run handleClick function
   top.addEventListener("click", handleClick);
-
-  for (var x = 0; x < WIDTH; x++) {
-    var headCell = document.createElement("td");
+//loop over the # of cells needed and create cells 
+  for (let x = 0; x < WIDTH; x++) {
+    const headCell = document.createElement("td");
+   //give cells id of their height 
     headCell.setAttribute("id", x);
+   // append the cells to the row
     top.append(headCell);
   }
-  htmlBoard.append(top);
+ // append rows to top row
+  board.append(top);
 
-  // TODO: add comment for this code
-  for (var y = 0; y < HEIGHT; y++) {
+  //loop over row # 
+  for (let y = 0; y < HEIGHT; y++) {
+    //create table row
     const row = document.createElement("tr");
-    for (var x = 0; x < WIDTH; x++) {
+    // loop over width
+    for (let x = 0; x < WIDTH; x++) {
+      //create cell
       const cell = document.createElement("td");
+      // set id for each cell "row#-column#"
       cell.setAttribute("id", `${y}-${x}`);
+      //append cell to row
       row.append(cell);
     }
-    htmlBoard.append(row);
+    //append row to board
+    board.append(row);
   }
 }
+
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
@@ -66,6 +73,11 @@ function findSpotForCol(x) {
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  const div = document.createElement('div');
+  div.classList.add('piece');
+  div.classList.add( `player${currPlayer}`);
+  const pieceLoc = document.getElementById(`${y}-${x}`);
+  pieceLoc.append(div);
 }
 
 /** endGame: announce game end */
@@ -78,10 +90,10 @@ function endGame(msg) {
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  var x = +evt.target.id;
+  let x = +evt.target.id;
 
   // get next spot in column (if none, ignore click)
-  var y = findSpotForCol(x);
+  let y = findSpotForCol(x);
   if (y === null) {
     return;
   }
@@ -122,12 +134,12 @@ function checkForWin() {
 
   // TODO: read and understand this code. Add comments to help you.
 
-  for (var y = 0; y < HEIGHT; y++) {
-    for (var x = 0; x < WIDTH; x++) {
-      var horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      var vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      var diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
-      var diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
+      const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+      const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+      const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
         return true;
