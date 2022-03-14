@@ -8,7 +8,7 @@
 const WIDTH = 7;
 const HEIGHT = 6;
 
-const currPlayer = 1; // active player: 1 or 2
+let currPlayer = 1; // active player: 1 or 2
 let board = [];
 
 /** makeBoard: create in-JS board structure:
@@ -23,8 +23,8 @@ function makeBoard() {
 
 
 function makeHtmlBoard() {
-const board = document.getElementById('board');
- //create column tops for top of board
+  //create header for top of board
+  const board = document.getElementById('board');
   const top = document.createElement("tr");
   // give it id of column top
   top.setAttribute("id", "column-top");
@@ -33,12 +33,12 @@ const board = document.getElementById('board');
 //loop over the # of cells needed and create cells 
   for (let x = 0; x < WIDTH; x++) {
     const headCell = document.createElement("td");
-   //give cells id of their height 
+   //give cells id of their # in line 
     headCell.setAttribute("id", x);
-   // append the cells to the row
+   // append the cells to the header
     top.append(headCell);
   }
- // append rows to top row
+ // append header to board
   board.append(top);
 
   //loop over row # 
@@ -47,7 +47,7 @@ const board = document.getElementById('board');
     const row = document.createElement("tr");
     // loop over width
     for (let x = 0; x < WIDTH; x++) {
-      //create cell
+      //create cells for each column
       const cell = document.createElement("td");
       // set id for each cell "row#-column#"
       cell.setAttribute("id", `${y}-${x}`);
@@ -62,14 +62,18 @@ const board = document.getElementById('board');
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
 function findSpotForCol(x) {
-  // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  for (let y = HEIGHT - 1; y >= 0; y--) {
+    if (!board[y][x]) {
+      return y;
+    }
+  }
+  return null;
 }
+
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
-  // TODO: make a div and insert into correct table cell
   const div = document.createElement('div');
   div.classList.add('piece');
   div.classList.add( `player${currPlayer}`);
@@ -80,7 +84,7 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
+ alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -96,7 +100,7 @@ function handleClick(evt) {
   }
 
   // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board
+  board[y][x] = currPlayer;
   placeInTable(y, x);
 
   // check for win
@@ -105,10 +109,12 @@ function handleClick(evt) {
   }
 
   // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
+  if (board.every(row => row.every(cell => cell))) {
+    return endGame('Tie!');
+  }
 
   // switch players
-  // TODO: switch currPlayer 1 <-> 2
+  currPlayer = currPlayer === 1 ? 2 : 1;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -130,15 +136,17 @@ function checkForWin() {
   }
 
   // TODO: read and understand this code. Add comments to help you.
-
+//loop over rows/columns
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
+      // loops over all horizontal, vertical and diagonal possibilities for matches
       const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
       const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
       const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
       const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
-
+     // if there is a match of 4 pieces in any of the horizontal, vertical or diagonal possibilities
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+        // return true
         return true;
       }
     }
